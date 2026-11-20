@@ -1,73 +1,77 @@
-/* ==========================================
+/* =====================================
    MOHIB SALON & GROOMING
-   Complete Website JavaScript
-========================================== */
+   Website JavaScript
+===================================== */
 
 
-/* ==========================================
-   1. MOBILE NAVIGATION
-========================================== */
+/* 1. MOBILE NAVIGATION */
 
 const menuToggle = document.querySelector(".menu-toggle");
-const navLinks = document.querySelector(".nav-links");
+const nav = document.querySelector(".nav");
 
-if (menuToggle && navLinks) {
+if (menuToggle && nav) {
 
-    menuToggle.setAttribute("aria-expanded", "false");
+    menuToggle.addEventListener("click", function () {
 
-    menuToggle.addEventListener("click", function (event) {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        const isOpen = navLinks.classList.toggle("active");
+        const isOpen = nav.classList.toggle("open");
 
         menuToggle.classList.toggle("active", isOpen);
 
         menuToggle.setAttribute("aria-expanded", isOpen);
 
+        menuToggle.setAttribute(
+            "aria-label",
+            isOpen ? "Close menu" : "Open menu"
+        );
+
     });
 
-    // Close menu when clicking a navigation link
-    navLinks.querySelectorAll("a").forEach(link => {
+    // Close menu after clicking a link
+
+    nav.querySelectorAll("a").forEach(link => {
 
         link.addEventListener("click", function () {
 
-            navLinks.classList.remove("active");
+            nav.classList.remove("open");
             menuToggle.classList.remove("active");
 
             menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open menu");
 
         });
 
     });
 
     // Close menu when clicking outside
+
     document.addEventListener("click", function (event) {
 
         if (
-            !menuToggle.contains(event.target) &&
-            !navLinks.contains(event.target)
+            !nav.contains(event.target) &&
+            !menuToggle.contains(event.target)
         ) {
 
-            navLinks.classList.remove("active");
+            nav.classList.remove("open");
             menuToggle.classList.remove("active");
 
             menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open menu");
 
         }
 
     });
 
     // Close menu with Escape key
+
     document.addEventListener("keydown", function (event) {
 
         if (event.key === "Escape") {
 
-            navLinks.classList.remove("active");
+            nav.classList.remove("open");
             menuToggle.classList.remove("active");
 
             menuToggle.setAttribute("aria-expanded", "false");
+            menuToggle.setAttribute("aria-label", "Open menu");
 
         }
 
@@ -76,9 +80,7 @@ if (menuToggle && navLinks) {
 }
 
 
-/* ==========================================
-   2. SMOOTH SCROLLING
-========================================== */
+/* 2. SMOOTH SCROLLING */
 
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
@@ -86,7 +88,7 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 
         const targetId = this.getAttribute("href");
 
-        if (!targetId || targetId === "#") return;
+        if (targetId === "#") return;
 
         const target = document.querySelector(targetId);
 
@@ -106,11 +108,9 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 });
 
 
-/* ==========================================
-   3. HEADER SCROLL EFFECT
-========================================== */
+/* 3. HEADER SCROLL EFFECT */
 
-const header = document.querySelector("header");
+const header = document.querySelector(".header");
 
 window.addEventListener("scroll", function () {
 
@@ -126,126 +126,18 @@ window.addEventListener("scroll", function () {
 }, { passive: true });
 
 
-/* ==========================================
-   4. BOOKING FORM VALIDATION
-========================================== */
+/* 4. DYNAMIC COPYRIGHT YEAR */
 
-const bookingForm = document.querySelector("#booking-form");
+const year = document.querySelector("#year");
 
-if (bookingForm) {
+if (year) {
 
-    bookingForm.addEventListener("submit", function (event) {
-
-        event.preventDefault();
-
-        const name = document.querySelector("#name")?.value.trim();
-
-        const phone = document.querySelector("#phone")?.value.trim();
-
-        const service = document.querySelector("#service")?.value;
-
-        const date = document.querySelector("#date")?.value;
-
-        const time = document.querySelector("#time")?.value;
-
-        if (!name || !phone || !service || !date || !time) {
-
-            alert("Please complete all booking fields.");
-
-            return;
-
-        }
-
-        const message = `
-MOHIB SALON & GROOMING
-New Appointment Request
-
-Name: ${name}
-Phone: ${phone}
-Service: ${service}
-Date: ${date}
-Time: ${time}
-
-Please confirm my appointment.
-        `;
-
-        const whatsappNumber = bookingForm.dataset.whatsapp;
-
-        if (!whatsappNumber) {
-
-            alert("Booking details are ready, but WhatsApp booking needs to be configured.");
-
-            return;
-
-        }
-
-        const whatsappURL =
-            `https://wa.me/${whatsappNumber}?text=` +
-            encodeURIComponent(message);
-
-        window.open(whatsappURL, "_blank");
-
-    });
+    year.textContent = new Date().getFullYear();
 
 }
 
 
-/* ==========================================
-   5. SCROLL REVEAL ANIMATIONS
-========================================== */
-
-const revealElements = document.querySelectorAll(
-    ".service-card, .gallery-item, .about-content, .section-title"
-);
-
-if ("IntersectionObserver" in window) {
-
-    const observer = new IntersectionObserver(
-
-        (entries, observer) => {
-
-            entries.forEach(entry => {
-
-                if (entry.isIntersecting) {
-
-                    entry.target.classList.add("visible");
-
-                    observer.unobserve(entry.target);
-
-                }
-
-            });
-
-        },
-
-        {
-            threshold: 0.15
-        }
-
-    );
-
-    revealElements.forEach(element => {
-
-        element.classList.add("reveal");
-
-        observer.observe(element);
-
-    });
-
-} else {
-
-    revealElements.forEach(element => {
-
-        element.classList.add("visible");
-
-    });
-
-}
-
-
-/* ==========================================
-   6. BACK TO TOP BUTTON
-========================================== */
+/* 5. BACK TO TOP SUPPORT */
 
 const backToTop = document.querySelector("#back-to-top");
 
@@ -263,11 +155,8 @@ if (backToTop) {
     backToTop.addEventListener("click", function () {
 
         window.scrollTo({
-
             top: 0,
-
             behavior: "smooth"
-
         });
 
     });
@@ -275,23 +164,6 @@ if (backToTop) {
 }
 
 
-/* ==========================================
-   7. DYNAMIC COPYRIGHT YEAR
-========================================== */
+/* 6. WEBSITE LOADED */
 
-const copyright = document.querySelector("#copyright-year");
-
-if (copyright) {
-
-    copyright.textContent = new Date().getFullYear();
-
-}
-
-
-/* ==========================================
-   8. CONSOLE MESSAGE
-========================================== */
-
-console.log(
-    "MOHIB SALON & GROOMING website loaded successfully."
-);
+console.log("Mohib Salon website loaded successfully!");
